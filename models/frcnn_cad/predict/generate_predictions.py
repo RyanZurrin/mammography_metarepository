@@ -24,12 +24,10 @@ def load_net(ptxt, w, use_gpu, device=0):
         caffe.set_mode_gpu()
         caffe.set_device(device)
         cfg.GPU_ID = device
-        net = caffe.Net(ptxt, w, caffe.TEST)
     else:
         caffe.set_mode_cpu()
         print("using cpu")
-        net = caffe.Net(ptxt, w, caffe.TEST)
-    return net
+    return caffe.Net(ptxt, w, caffe.TEST)
 
 
 # Try resizing before and after scaling
@@ -62,41 +60,40 @@ def eval_net(net,pkl_file,image_path,n=None,NMS_THRESH = 0.1):
     
     # Set random number generator
     random_number_generator = np.random.RandomState(0)
- 
+
     # Load information about exams
     with open(pkl_file, 'rb') as f:
         data = pickle.load(f)
 
     image_indexes = []
     malignant_pred = []
-    malignant_label = []    
+    malignant_label = []
     # Iterate over exams in data
     for d in tqdm(data):
         for v in ['L-CC', 'L-MLO', 'R-CC', 'R-MLO']:
             if len(d[v]) == 0:
                 continue
+            index = random_number_generator.randint(low=0, high=len(d[v]))
+            image_id = d[v][index]
+            image_indexes.append(image_id)
+            im_path = image_path + '/' + image_id + '.png'
+            im = preprocess_image(im_path)
+            bboxes_and_scores = score_im(net,im,NMS_THRESH)
+            scores = bboxes_and_scores[:, -1]
+            max_score = np.max(scores)
+            malignant_pred.append(max_score)
+
+            if v[0] == 'L':
+                malignant_label.append(d['cancer_label']['left_malignant'])
             else:
-                index = random_number_generator.randint(low=0, high=len(d[v]))
-                image_id = d[v][index]    
-                image_indexes.append(image_id)
-                im_path = image_path + '/' + image_id + '.png'
-                im = preprocess_image(im_path)
-                bboxes_and_scores = score_im(net,im,NMS_THRESH)
-                scores = bboxes_and_scores[:, -1]
-                max_score = np.max(scores)
-                malignant_pred.append(max_score)
-            
-                if v[0] == 'L':
-                    malignant_label.append(d['cancer_label']['left_malignant'])
-                else:
-                    malignant_label.append(d['cancer_label']['right_malignant'])
-      
+                malignant_label.append(d['cancer_label']['right_malignant'])
+
     # Create pandas dataframe
     df = pd.DataFrame()
     df["image_index"] = image_indexes
     df["malignant_pred"] = malignant_pred
     df["malignant_label"] = malignant_label
-   
+
 
     return df
 
@@ -126,11 +123,7 @@ if __name__ == "__main__":
     parser.add_argument('--use-gpu', required=True) 
 
     args = parser.parse_args()
-    if args.use_gpu == 'gpu':
-        args.use_gpu = True
-    else:
-        args.use_gpu = False
-
+    args.use_gpu = args.use_gpu == 'gpu'
     main(args.exam_list_path, args.input_data_folder, args.prediction_file, args.use_gpu)
 
 

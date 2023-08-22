@@ -13,10 +13,7 @@ from sklearn.utils import resample
 
 def breast_or_image_level(prediction_file):
     df = pd.read_csv(prediction_file, header=0)
-    if "left_malignant" in list(df.columns.values):
-        return "breast"
-    else:
-        return "image"
+    return "breast" if "left_malignant" in list(df.columns.values) else "image"
 
 
 def calc_confidence_interval(sample, confidence=0.95):
@@ -49,7 +46,7 @@ def generate_statistics(labels, predictions, name, bootstrapping=False):
 
             b_roc_auc_list = []
             b_pr_auc_list = []
-            for i in range(n_bootstraps):
+            for _ in range(n_bootstraps):
                 boot = resample(list(zip(labels, predictions)), replace=True, n_samples=n_samples)
                 b_labels, b_predictions = list(zip(*boot))
 
@@ -71,7 +68,7 @@ def generate_statistics(labels, predictions, name, bootstrapping=False):
     else:
         print(f"\n AUROC: {roc_auc:.3f}",
               f"\n AUPRC: {pr_auc:.3f}")
-    
+
     print(f"\n ROC Plot: {roc_curve_path}",
           f"\n PRC Plot: {pr_curve_path}")
 
@@ -173,10 +170,7 @@ def plot_roc_curve(preds, labels, name):
 
 
 def main(pickle_file, prediction_file, bootstrapping):
-    if str(bootstrapping.lower()) == 'no_bootstrap':
-        bootstrapping = False
-    else:
-        bootstrapping = True
+    bootstrapping = str(bootstrapping.lower()) != 'no_bootstrap'
     breast_or_image = breast_or_image_level(prediction_file)
     if breast_or_image == "image":
         get_breast_level_scores_from_image_level(prediction_file, pickle_file, bootstrapping)
@@ -184,7 +178,7 @@ def main(pickle_file, prediction_file, bootstrapping):
     else:
         get_breast_level_scores(prediction_file, pickle_file, bootstrapping)
 
-    print("Prediction file: {}".format(prediction_file))
+    print(f"Prediction file: {prediction_file}")
 
 
 if __name__ == "__main__":
