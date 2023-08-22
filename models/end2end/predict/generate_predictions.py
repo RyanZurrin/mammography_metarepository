@@ -22,11 +22,10 @@ def read_resize_img(fname, target_size=None, target_height=None, target_scale=No
         raise Exception('One of [taget_size, target_height] must not be None')
     if path.splitext(fname)[1] == '.dcm':
         img = dicom.read_file(fname).pixel_array
+    elif gs_255:
+        img = cv2.imread(fname, cv2.IMREAD_GRAYSCALE)
     else:
-        if gs_255:
-            img = cv2.imread(fname, cv2.IMREAD_GRAYSCALE)
-        else:
-            img = cv2.imread(fname, cv2.IMREAD_UNCHANGED)
+        img = cv2.imread(fname, cv2.IMREAD_UNCHANGED)
     if target_height is not None:
         target_width = int(float(target_height) / img.shape[0] * img.shape[1])
     else:
@@ -58,15 +57,13 @@ def evaluate(model, model_name, pkl_path, image_path, mean_pixel_intensity, resc
     malignant_pred = []
     malignant_label = []
 
+    # Store left and right (assuming only using one image for MLO and CC view)
+    # Running scores to average
+    left_score = 0
+    right_score = 0
     for d in tqdm(data):
-        # Store left and right (assuming only using one image for MLO and CC view)
-        # Running scores to average
-        left_score = 0
-        right_score = 0
         for v in ['L-CC', 'L-MLO', 'R-CC', 'R-MLO']:
-            if len(d[v]) == 0:
-                continue
-            else:
+            if len(d[v]) != 0:
                 # Select random image if more than one image is available
                 index = random_number_generator.randint(low=0, high=len(d[v]))
                 image_id = d[v][index]

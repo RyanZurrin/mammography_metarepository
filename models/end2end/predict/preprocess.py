@@ -12,23 +12,22 @@ def preprocess(exam, data_folder, save_path, image_format):
     for v in ['L-CC', 'L-MLO', 'R-CC', 'R-MLO']:
         if len(exam[v]) == 0:
             continue
-        else:
-            for image in exam[v]:
-                image_path = data_folder + '/' + image + '.' + image_format
-                # Extract subdirectories
-                subdirs = "/".join(image.split('/')[:-1])
-                save_dirs = os.path.join(save_path, subdirs)
-                # Extract image id
-                image_id = image.split('/')[-1]
-                # Create save directories
-                os.makedirs(save_dirs, exist_ok=True)
-                png_save_path = os.path.join(save_dirs, image_id + '.png')
-                with Image(filename=image_path, format=image_format) as img:
-                    with img.clone() as i:
-                        i.auto_level()
-                        with i.convert('png') as png_image:
-                            png_image.transform(resize='896x1152!')
-                            png_image.save(filename=png_save_path)
+        for image in exam[v]:
+            image_path = f'{data_folder}/{image}.{image_format}'
+            # Extract subdirectories
+            subdirs = "/".join(image.split('/')[:-1])
+            save_dirs = os.path.join(save_path, subdirs)
+            # Extract image id
+            image_id = image.split('/')[-1]
+            # Create save directories
+            os.makedirs(save_dirs, exist_ok=True)
+            png_save_path = os.path.join(save_dirs, f'{image_id}.png')
+            with Image(filename=image_path, format=image_format) as img:
+                with img.clone() as i:
+                    i.auto_level()
+                    with i.convert('png') as png_image:
+                        png_image.transform(resize='896x1152!')
+                        png_image.save(filename=png_save_path)
 
 
 def main(initial_exam_list_path, data_folder, preprocessed_folder, num_processes, preprocess_flag, image_format):
