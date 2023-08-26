@@ -1,16 +1,24 @@
 FROM nvidia/cuda:12.2.0-base-ubuntu20.04
+# Set non-interactive mode for apt-get
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Set the timezone; replace "America/New_York" with your desired timezone
+RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
 
 # GPG key error fix
 # ref: https://github.com/nyukat/mammography_metarepository/issues/24
 # ref: https://github.com/NVIDIA/nvidia-docker/issues/1631
-RUN rm /etc/apt/sources.list.d/cuda.list
-RUN rm /etc/apt/sources.list.d/nvidia-ml.list || true
-RUN apt-key del 7fa2af80
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
+# GPG key error fix
+RUN rm /etc/apt/sources.list.d/cuda.list \
+    && rm /etc/apt/sources.list.d/nvidia-ml.list || true \
+    && apt-key del 7fa2af80 \
+    && apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub \
+    && apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
+
 
 # Proceed with building
-RUN apt-get update && apt-get install -y libglib2.0-0\
+RUN apt-get update && apt-get install -y \
+    libglib2.0-0\
     libsm6 \
     libxext6 \
     libxrender-dev \
@@ -22,7 +30,9 @@ RUN apt-get update && apt-get install -y libglib2.0-0\
     wget \
     python3.6 \
     python3-pip \
-    && rm -rf /var/lib/apt/lists/*
+    tzdata && \
+    dpkg-reconfigure --frontend noninteractive tzdata && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home/bcc
 
