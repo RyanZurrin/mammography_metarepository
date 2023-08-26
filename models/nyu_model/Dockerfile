@@ -1,4 +1,4 @@
-FROM nvidia/cuda:12.2.0-base-ubuntu20.04
+FROM nvidia/cuda:11.0.3-base-ubuntu18.04
 # Set non-interactive mode for apt-get
 ENV DEBIAN_FRONTEND=noninteractive
 
