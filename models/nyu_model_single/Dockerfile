@@ -1,4 +1,4 @@
-FROM nvidia/cuda:10.1-base-ubuntu18.04
+FROM nvidia/cuda:11.0.3-base-ubuntu18.04
 
 # GPG key error fix
 # ref: https://github.com/nyukat/mammography_metarepository/issues/24
@@ -10,8 +10,8 @@ RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/
 RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
 
 # Proceed with building
-RUN apt-get update
-RUN apt-get install -y libglib2.0-0\
+RUN apt-get update && apt-get install -y \
+    libglib2.0-0\
     libsm6 \
     libxext6 \
     libxrender-dev \
@@ -19,11 +19,13 @@ RUN apt-get install -y libglib2.0-0\
     libjpeg-dev \
     vim \
     git \
-    wget \
     bash \
-    python3.6 \
+    wget \
+    python3.8 \
     python3-pip \
-    && rm -rf /var/lib/apt/lists/*
+    tzdata && \
+    dpkg-reconfigure --frontend noninteractive tzdata && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /home/bcc
 
@@ -35,7 +37,7 @@ RUN git clone https://github.com/nyukat/breast_cancer_classifier.git \
 RUN pip3 install --no-cache-dir --trusted-host pypi.python.org h5py==2.8.0 \
     imageio==2.4.1 \
     numpy==1.14.3 \
-    opencv-python==3.4.2.17 \
+    opencv-python==3.4.8.29 \
     pandas==0.22.0 \
     scipy==1.0.0 \
     tqdm==4.19.8
