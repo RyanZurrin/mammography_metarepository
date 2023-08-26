@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y \
     git \
     bash \
     wget \
-    python3.6 \
+    python3.8 \
     python3-pip \
     tzdata && \
     dpkg-reconfigure --frontend noninteractive tzdata && \
