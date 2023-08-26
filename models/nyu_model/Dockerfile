@@ -1,4 +1,4 @@
-FROM nvidia/cuda:10.1-base-ubuntu18.04
+FROM nvidia/cuda:12.2.0-base-ubuntu20.04
 
 # GPG key error fix
 # ref: https://github.com/nyukat/mammography_metarepository/issues/24
