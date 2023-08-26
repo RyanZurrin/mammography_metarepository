@@ -17,7 +17,7 @@ GROUP_INFO=($(echo ${ENTRIES[0]} | tr "," " "))
 GROUPNAME=${GROUP_INFO[0]}
 GROUPID=${GROUP_INFO[1]}
 
-addgroup --gid ${GROUP_INFO[1]} ${GROUP_INFO[0]}
+addgroup --force-badname --gid ${GROUP_INFO[1]} ${GROUP_INFO[0]}
 
 echo ${GROUPNAME}
 
