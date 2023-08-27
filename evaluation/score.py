@@ -10,6 +10,7 @@ import pandas as pd
 import sklearn.metrics as metrics
 from sklearn.utils import resample
 
+SAVE_DIR = '/home/ryan.zurrin001/'
 
 def breast_or_image_level(prediction_file):
     df = pd.read_csv(prediction_file, header=0)
@@ -150,7 +151,7 @@ def get_breast_level_scores_from_image_level(prediction_file, pickle_file, boots
 
 
 def plot_pr_curve(precision, recall, name):
-    save_path = name + '_pr_curve.png'
+    save_path = SAVE_DIR + name + '_pr_curve.png'
     plt.figure(figsize=(5, 5))
     plt.plot(recall, precision)
     plt.title("PR Curve")
@@ -161,7 +162,7 @@ def plot_pr_curve(precision, recall, name):
 
 
 def plot_roc_curve(preds, labels, name):
-    save_path = name + '_roc_curve.png'
+    save_path = SAVE_DIR + name + '_roc_curve.png'
     fpr, tpr, threshold = metrics.roc_curve(labels, preds)
     plt.figure(figsize=(5, 5))
     plt.plot(fpr, tpr)
