@@ -1,5 +1,5 @@
 # Essential arguments
-CONTAINER_PREDICT_PATH="/home/ryan.zurrin001/bcc/breast_cancer_classifier"
+CONTAINER_PREDICT_PATH="/home/bcc/breast_cancer_classifier"
 
 # Other arguments
 HEATMAP_BATCH_SIZE=100
