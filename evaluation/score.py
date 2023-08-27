@@ -151,7 +151,6 @@ def get_breast_level_scores_from_image_level(prediction_file, pickle_file, boots
 
 
 def plot_pr_curve(precision, recall, name):
-    print(f"in plot_pr_curve and name is {name}")
     save_path = os.path.join('/home/ryan.zurrin001/', 'test_breast_level_pr_curve.png')
     plt.figure(figsize=(5, 5))
     plt.plot(recall, precision)
@@ -165,7 +164,6 @@ def plot_pr_curve(precision, recall, name):
 
 
 def plot_roc_curve(preds, labels, name):
-    print(f"in plot_roc_curve and name is {name}")
     save_path = os.path.join('/home/ryan.zurrin001/', 'test_breast_level_roc_curve.png')
     fpr, tpr, threshold = metrics.roc_curve(labels, preds)
     plt.figure(figsize=(5, 5))
