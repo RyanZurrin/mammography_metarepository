@@ -161,8 +161,9 @@ def plot_pr_curve(precision, recall, name):
     plt.title("PR Curve")
     plt.xlabel("Recall")
     plt.ylabel("Precision")
-    plt.savefig(save_path)
     print("Saving to:", save_path)
+    plt.savefig(save_path)
+    
     return save_path
 
 
@@ -175,8 +176,9 @@ def plot_roc_curve(preds, labels, name):
     plt.title("ROC Curve")
     plt.xlabel("FPR")
     plt.ylabel("TPR")
-    plt.savefig(save_path)
     print("Saving to:", save_path)
+    plt.savefig(save_path)
+    
     return save_path
 
 
