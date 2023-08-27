@@ -12,6 +12,8 @@ import sklearn.metrics as metrics
 from sklearn.utils import resample
 
 SAVE_DIR = '/home/ryan.zurrin001/'
+save_path = os.path.join(SAVE_DIR, 'ryan_breast_level_roc_curve.png')
+
 
 def breast_or_image_level(prediction_file):
     df = pd.read_csv(prediction_file, header=0)
