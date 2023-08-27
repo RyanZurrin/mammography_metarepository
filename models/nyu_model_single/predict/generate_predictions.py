@@ -36,8 +36,8 @@ def main(pkl_file, image_path, device_type, prediction_file, num_epochs, heatmap
                 image_id = d[v][index]
                 image_indexes.append(image_id)
                 mammogram_path = image_path + '/' + image_id + '.png'
-                cropped_path = "/home/ryan.zurrin001/bcc/breast_cancer_classifier/cropped.png"
-                metadata_path = "/home/ryan.zurrin001/bcc/breast_cancer_classifier/cropped_metadata.pkl"
+                cropped_path = "/home/bcc/breast_cancer_classifier/cropped.png"
+                metadata_path = "/home/bcc/breast_cancer_classifier/cropped_metadata.pkl"
                 # Crop mammogram
                 crop_single_mammogram(mammogram_path=mammogram_path,
                                       view=v,
@@ -52,8 +52,8 @@ def main(pkl_file, image_path, device_type, prediction_file, num_epochs, heatmap
                     cropped_mammogram_path=cropped_path,
                     metadata_path=metadata_path
                 )
-                heatmap_path_malignant = "/home/ryan.zurrin001/bcc/breast_cancer_classifier/malignant_heatmap.hdf5"
-                heatmap_path_benign = "/home/ryan.zurrin001/bcc/breast_cancer_classifier/benign_heatmap.hdf5"
+                heatmap_path_malignant = "/home/bcc/breast_cancer_classifier/malignant_heatmap.hdf5"
+                heatmap_path_benign = "/home/bcc/breast_cancer_classifier/benign_heatmap.hdf5"
                 if use_heatmaps:
                     # Heatmap generation
                     heatmap_parameters = dict(
