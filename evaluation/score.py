@@ -1,8 +1,8 @@
 import pickle
 import sys
-import os
 
 import matplotlib
+
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
@@ -72,7 +72,7 @@ def generate_statistics(labels, predictions, name, bootstrapping=False):
     else:
         print(f"\n AUROC: {roc_auc:.3f}",
               f"\n AUPRC: {pr_auc:.3f}")
-    
+
     print(f"\n ROC Plot: {roc_curve_path}",
           f"\n PRC Plot: {pr_curve_path}")
 
@@ -151,29 +151,25 @@ def get_breast_level_scores_from_image_level(prediction_file, pickle_file, boots
 
 
 def plot_pr_curve(precision, recall, name):
-    save_path = os.path.join('/home/ryan.zurrin001/', 'test_breast_level_pr_curve.png')
+    save_path = name + '_pr_curve.png'
     plt.figure(figsize=(5, 5))
     plt.plot(recall, precision)
     plt.title("PR Curve")
     plt.xlabel("Recall")
     plt.ylabel("Precision")
-    print("Saving to:", save_path)
     plt.savefig(save_path)
-    
     return save_path
 
 
 def plot_roc_curve(preds, labels, name):
-    save_path = os.path.join('/home/ryan.zurrin001/', 'test_breast_level_roc_curve.png')
+    save_path = name + '_roc_curve.png'
     fpr, tpr, threshold = metrics.roc_curve(labels, preds)
     plt.figure(figsize=(5, 5))
     plt.plot(fpr, tpr)
     plt.title("ROC Curve")
     plt.xlabel("FPR")
     plt.ylabel("TPR")
-    print("Saving to:", save_path)
     plt.savefig(save_path)
-    
     return save_path
 
 
