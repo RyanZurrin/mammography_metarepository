@@ -125,7 +125,7 @@ build_docker_image () {
     GROUPNAME=$(get_groupname)
     echo "${GROUPNAME}"
     echo "Building image"
-    docker build -t "${MODEL}" -f models/${MODEL}/Dockerfile --build-arg GROUPNAME="${GROUPNAME}" .
+    docker build --no-cache -t "${MODEL}" -f models/${MODEL}/Dockerfile --build-arg GROUPNAME="${GROUPNAME}" .
 }
 
 run_model () {
@@ -167,6 +167,7 @@ run_model () {
 
 if docker images | grep -q -w "${MODEL}"; then
     echo "Model already built, running."
+    build_docker_image
     run_model
 elif ls models/"${MODEL}" &>/dev/null; then
     echo "Model not built, building."

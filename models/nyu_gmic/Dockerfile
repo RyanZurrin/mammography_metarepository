@@ -1,4 +1,9 @@
-FROM nvidia/cuda:10.1-base-ubuntu18.04
+FROM nvidia/cuda:11.0.3-base-ubuntu18.04
+# Set non-interactive mode for apt-get
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Set the timezone; replace "America/New_York" with your desired timezone
+RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
 
 RUN apt-get update && apt-get install -y libglib2.0-0\
     libsm6 \
