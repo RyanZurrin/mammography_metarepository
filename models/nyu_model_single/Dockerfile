@@ -1,8 +1,10 @@
 FROM nvidia/cuda:11.0.3-base-ubuntu18.04
+
 # Set non-interactive mode for apt-get
 ENV DEBIAN_FRONTEND=noninteractive
 # Set the timezone; replace "America/New_York" with your desired timezone
 RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime
+
 # GPG key error fix
 # ref: https://github.com/nyukat/mammography_metarepository/issues/24
 # ref: https://github.com/NVIDIA/nvidia-docker/issues/1631
@@ -24,7 +26,7 @@ RUN apt-get update && apt-get install -y \
     git \
     bash \
     wget \
-    python3.8 \
+    python3.6 \
     python3-pip \
     tzdata && \
     dpkg-reconfigure --frontend noninteractive tzdata && \
