@@ -7,7 +7,7 @@ NAME=$4
 DEVICE=$5
 PREPROCESSED_FOLDER=$6
 
-MODEL_INDEX="1"
+MODEL_INDEX="2"
 NUM_PROCESSES="10"
 PREPROCESS_FLAG="True"
 
@@ -16,6 +16,16 @@ CROPPED_IMAGE_PATH="${PREPROCESSED_FOLDER}/nyu_gmic_${NAME}_cropped_images"
 CROPPED_EXAM_LIST_PATH="${PREPROCESSED_FOLDER}/nyu_gmic_${NAME}_cropped_images/cropped_exam_list.pkl"
 OUTPUT_PATH="${PREPROCESSED_FOLDER}/nyu_gmic_${NAME}_sample_output"
 EXAM_LIST_PATH="${PREPROCESSED_FOLDER}/nyu_gmic_${NAME}_center_data.pkl"
+
+# Check if the preprocessed folder has contents and if so delete all the contents.
+if [ -d "${PREPROCESSED_FOLDER}" ]; then
+    if [ "$(ls -A ${PREPROCESSED_FOLDER})" ]; then
+        # remove all the contents of the folder
+        rm -r "${PREPROCESSED_FOLDER}"/*
+    fi
+else
+    mkdir -p "${PREPROCESSED_FOLDER}"
+fi
 
 if [ "${PREPROCESS_FLAG}" = "True" ]; then
     [ -d "${CROPPED_IMAGE_PATH}" ] && rm -r "${CROPPED_IMAGE_PATH}"
